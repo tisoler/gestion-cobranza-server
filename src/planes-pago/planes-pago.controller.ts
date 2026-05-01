@@ -12,10 +12,10 @@ import { Permissions } from '../auth/decorators/permissions.decorator';
 @UseGuards(FirebaseGuard, PermissionsGuard)
 @Controller('planes-pago')
 export class PlanesPagoController {
-  constructor(private readonly planesPagoService: PlanesPagoService) {}
+  constructor(private readonly planesPagoService: PlanesPagoService) { }
 
   @Get()
-  @Permissions('lectura:persona')
+  @Permissions('lectura:planespago')
   @ApiOperation({ summary: 'Obtener planes de pago' })
   findAll(
     @Req() req: { user?: { idEntidad?: number; roles?: string[] } },
@@ -29,32 +29,32 @@ export class PlanesPagoController {
   }
 
   @Post()
-  @Permissions('escritura:persona')
+  @Permissions('escritura:planespago')
   @ApiOperation({ summary: 'Crear un nuevo plan de pago' })
   create(
     @Req() req: { user?: { idEntidad?: number; roles?: string[] } },
     @Body() dto: CreatePlanPagoDto
   ) {
     const isSysAdmin = req.user?.roles?.includes('sys-admin');
-    
+
     // Si no es sys-admin, forzar su idEntidad
     if (!isSysAdmin && req.user?.idEntidad) {
       dto.idEntidad = req.user.idEntidad;
     }
-    
+
     return this.planesPagoService.create(dto);
   }
 
   @Patch(':id/toggle')
-  @Permissions('escritura:persona')
+  @Permissions('escritura:planespago')
   @ApiOperation({ summary: 'Habilitar o deshabilitar un plan de pago' })
   async toggle(
     @Req() req: { user?: { idEntidad?: number; roles?: string[] } },
     @Param('id') id: string
   ) {
     const res = await this.planesPagoService.toggleActivo(
-      +id, 
-      req.user?.idEntidad, 
+      +id,
+      req.user?.idEntidad,
       req.user?.roles
     );
     if (!res) throw new NotFoundException('Plan no encontrado o acceso denegado');
@@ -62,7 +62,7 @@ export class PlanesPagoController {
   }
 
   @Patch(':id')
-  @Permissions('escritura:persona')
+  @Permissions('escritura:planespago')
   @ApiOperation({ summary: 'Actualizar un plan de pago' })
   async update(
     @Req() req: { user?: { idEntidad?: number; roles?: string[] } },
