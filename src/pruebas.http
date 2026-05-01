@@ -1,0 +1,9 @@
+### GET Personas
+GET http://localhost:3070/api/personas
+Accept: application/json
+Authorization: Bearer 
+
+### GET Personas - PROD
+GET https://api.cobros.tisoler.net.ar/api/entidades
+Accept: application/json
+Authorization: Bearer 

@@ -1,0 +1,1 @@
+ALTER TABLE personas ADD COLUMN habilitado BOOLEAN DEFAULT true;
