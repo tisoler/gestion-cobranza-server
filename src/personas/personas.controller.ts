@@ -130,7 +130,10 @@ export class PersonasController {
     @Req() req: { user?: { idEntidad?: number; roles?: string[] } },
     @Param('id') id: string,
   ) {
-    const persona = await this.personasService.toggleHabilitado(+id, req.user?.idEntidad);
+    const persona = await this.personasService.toggleHabilitado(
+      +id,
+      req.user?.idEntidad,
+    );
     if (!persona) {
       throw new NotFoundException('Persona no encontrada');
     }

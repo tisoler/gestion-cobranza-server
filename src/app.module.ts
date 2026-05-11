@@ -18,6 +18,7 @@ import { EntidadesModule } from './entidades/entidades.module';
 import { PersonasModule } from './personas/personas.module';
 import { GestionesModule } from './gestiones/gestiones.module';
 import { PlanesPagoModule } from './planes-pago/planes-pago.module';
+import { ImportacionesModule } from './importaciones/importaciones.module';
 
 @Module({
   imports: [
@@ -34,10 +35,18 @@ import { PlanesPagoModule } from './planes-pago/planes-pago.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         entities: [
-          Entidad, Persona, TgiUrbano, TgiRural, Patente, Gestion,
-          CuotaTgiUrbano, CuotaTgiRural, CuotaPatente, PlanPago
+          Entidad,
+          Persona,
+          TgiUrbano,
+          TgiRural,
+          Patente,
+          Gestion,
+          CuotaTgiUrbano,
+          CuotaTgiRural,
+          CuotaPatente,
+          PlanPago,
         ],
-        synchronize: false, 
+        synchronize: false,
         logging: true,
       }),
       inject: [ConfigService],
@@ -47,6 +56,7 @@ import { PlanesPagoModule } from './planes-pago/planes-pago.module';
     PersonasModule,
     GestionesModule,
     PlanesPagoModule,
+    ImportacionesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

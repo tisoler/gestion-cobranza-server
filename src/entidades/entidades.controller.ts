@@ -1,5 +1,10 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { EntidadesService } from './entidades.service';
 import { FirebaseGuard } from '../auth/guards/firebase.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
@@ -14,8 +19,13 @@ export class EntidadesController {
 
   @Get()
   @Permissions('lectura:entidad')
-  @ApiOperation({ summary: 'Obtener todas las entidades permitidas para el usuario' })
-  @ApiResponse({ status: 200, description: 'Lista de entidades obtenida correctamente.' })
+  @ApiOperation({
+    summary: 'Obtener todas las entidades permitidas para el usuario',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de entidades obtenida correctamente.',
+  })
   findAll(@Req() req) {
     return this.entidadesService.findAll(req.user);
   }

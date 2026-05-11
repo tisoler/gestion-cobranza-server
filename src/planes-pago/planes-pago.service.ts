@@ -11,10 +11,10 @@ export class PlanesPagoService {
     private planPagoRepository: Repository<PlanPago>,
   ) {}
 
-  findAll(options: { 
-    producto?: string; 
-    idEntidad?: number; 
-    roles?: string[]; 
+  findAll(options: {
+    producto?: string;
+    idEntidad?: number;
+    roles?: string[];
   }) {
     const { producto, idEntidad, roles = [] } = options;
     const isSysAdmin = roles.includes('sys-admin');
@@ -23,31 +23,11 @@ export class PlanesPagoService {
     const where: FindOptionsWhere<PlanPago> = {};
     if (producto) where.producto = producto;
 
+    // Strict entity filtering: if not sys-admin, MUST have an idEntidad
     if (!isSysAdmin) {
-      if (idEntidad) {
-        where.idEntidad = IsNull() ? IsNull() : idEntidad; 
-        // Note: The logic for "this entity or global" depends on OR in typeorm
-        // Since we need "idEntidad = X OR idEntidad IS NULL", we'll use an array of objects for OR
-        const conditions = [];
-        if (producto) {
-           conditions.push({ producto, idEntidad });
-           conditions.push({ producto, idEntidad: IsNull() });
-        } else {
-           conditions.push({ idEntidad });
-           conditions.push({ idEntidad: IsNull() });
-        }
-        
-        // If they are not admin/sysadmin, they should only see active planes
-        if (!isAdmin) {
-          conditions.forEach(c => c.activo = true);
-        }
-        
-        return this.planPagoRepository.find({ where: conditions });
-      } else {
-        // If no entity context and not sys-admin, only global
-        where.idEntidad = IsNull();
-        if (!isAdmin) where.activo = true;
-      }
+      if (!idEntidad) return []; // Access denied if no entity context
+      where.idEntidad = idEntidad;
+      if (!isAdmin) where.activo = true; // Gestores only see active
     }
 
     return this.planPagoRepository.find({ where });
@@ -60,7 +40,7 @@ export class PlanesPagoService {
   async toggleActivo(id: number, idEntidad?: number, roles: string[] = []) {
     const isSysAdmin = roles.includes('sys-admin');
     const where: FindOptionsWhere<PlanPago> = { id };
-    
+
     if (!isSysAdmin && idEntidad) {
       where.idEntidad = idEntidad;
     }
@@ -74,7 +54,7 @@ export class PlanesPagoService {
   async update(id: number, dto: any, idEntidad?: number, roles: string[] = []) {
     const isSysAdmin = roles.includes('sys-admin');
     const where: FindOptionsWhere<PlanPago> = { id };
-    
+
     if (!isSysAdmin && idEntidad) {
       where.idEntidad = idEntidad;
     }

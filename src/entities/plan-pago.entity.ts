@@ -8,7 +8,7 @@ export class PlanPago {
   @Column()
   nombre: string;
 
-  /** 
+  /**
    * Producto al que aplica: 'tgi_urbano', 'tgi_rural', 'patente'
    */
   @Column()

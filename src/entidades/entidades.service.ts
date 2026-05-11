@@ -9,7 +9,7 @@ export class EntidadesService {
   constructor(
     @InjectRepository(Entidad)
     private entidadRepository: Repository<Entidad>,
-  ) { }
+  ) {}
 
   findAll(user: any): Promise<Entidad[]> {
     const isSysAdmin = user.roles?.includes(Roles.SYS_ADMIN);
@@ -17,7 +17,7 @@ export class EntidadesService {
     if (isSysAdmin) {
       return this.entidadRepository.find({
         where: { activo: true },
-        order: { nombre: 'ASC' }
+        order: { nombre: 'ASC' },
       });
     }
 
@@ -28,7 +28,8 @@ export class EntidadesService {
 
     if (allowedIds.length === 0) return Promise.resolve([]);
 
-    return this.entidadRepository.createQueryBuilder('entidad')
+    return this.entidadRepository
+      .createQueryBuilder('entidad')
       .where('entidad.id IN (:...ids)', { ids: allowedIds })
       .andWhere('entidad.activo = :activo', { activo: true })
       .orderBy('entidad.nombre', 'ASC')

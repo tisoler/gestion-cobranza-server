@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { Persona } from './persona.entity';
 import { CuotaPatente } from './cuota-patente.entity';
 
@@ -20,14 +27,20 @@ export class Patente {
   @Column()
   numero_patente: string;
 
-  @Column()
+  @Column({ nullable: true })
   marca: string;
 
-  @Column()
+  @Column({ nullable: true })
   modelo: string;
+
+  @Column({ nullable: true, name: 'marca_modelo' })
+  marcaModelo: string;
 
   @Column()
   tipo: string;
+
+  @Column({ nullable: true })
+  tramo: string;
 
   @OneToMany(() => CuotaPatente, (cuota) => cuota.patente)
   cuotas: CuotaPatente[];

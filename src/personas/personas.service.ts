@@ -83,25 +83,30 @@ export class PersonasService {
       query.andWhere('persona.idEntidad = :idEntidad', { idEntidad });
     }
 
-    const isSysAdminOrAdmin = roles.includes('sys-admin') || roles.includes('admin');
+    const isSysAdminOrAdmin =
+      roles.includes('sys-admin') || roles.includes('admin');
     if (!isSysAdminOrAdmin) {
       query.andWhere('persona.habilitado = :habilitado', { habilitado: true });
     }
 
     // Filtros
     if (dni && dni.length >= 3) {
-      query.andWhere('persona.dni ILIKE :dni', { dni: `%${dni}%` });
+      query.andWhere('persona.nroDoc ILIKE :dni', { dni: `%${dni}%` });
     }
     if (cuit && cuit.length >= 3) {
       query.andWhere('persona.cuit ILIKE :cuit', { cuit: `%${cuit}%` });
     }
     if (nombre && nombre.length >= 3) {
-      query.andWhere('persona.nombre ILIKE :nombre', { nombre: `%${nombre}%` });
+      query.andWhere(
+        '(persona.nombre ILIKE :nombre OR persona.apellidoNombre ILIKE :nombre)',
+        { nombre: `%${nombre}%` },
+      );
     }
     if (apellido && apellido.length >= 3) {
-      query.andWhere('persona.apellido ILIKE :apellido', {
-        apellido: `%${apellido}%`,
-      });
+      query.andWhere(
+        '(persona.apellido ILIKE :apellido OR persona.apellidoNombre ILIKE :apellido)',
+        { apellido: `%${apellido}%` },
+      );
     }
     if (telefono && telefono.length >= 3) {
       query.andWhere(
@@ -276,15 +281,17 @@ export class PersonasService {
       where.idEntidad = idEntidad;
     }
 
-    const persona = await this.personaRepository.findOne({ 
-      where, 
-      select: ['id', 'habilitado'] 
+    const persona = await this.personaRepository.findOne({
+      where,
+      select: ['id', 'habilitado'],
     });
-    
+
     if (!persona) return null;
-    
+
     persona.habilitado = !persona.habilitado;
-    await this.personaRepository.update(persona.id, { habilitado: persona.habilitado });
+    await this.personaRepository.update(persona.id, {
+      habilitado: persona.habilitado,
+    });
     return persona;
   }
 }

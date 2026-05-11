@@ -9,17 +9,41 @@ export class Persona {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
-  dni: string;
+  @Column({ nullable: true, name: 'tipo_doc' })
+  tipoDoc: string;
+
+  @Column({ nullable: true, name: 'nro_doc' })
+  nroDoc: string;
 
   @Column({ nullable: true })
   cuit: string;
+
+  @Column({ nullable: true, name: 'apellido_nombre' })
+  apellidoNombre: string;
 
   @Column()
   nombre: string;
 
   @Column()
   apellido: string;
+
+  @Column({ nullable: true, name: 'calle_domicilio' })
+  calleDomicilio: string;
+
+  @Column({ nullable: true, name: 'numero_domicilio' })
+  numeroDomicilio: string;
+
+  @Column({ nullable: true, name: 'piso_domicilio' })
+  pisoDomicilio: string;
+
+  @Column({ nullable: true, name: 'depto_domicilio' })
+  deptoDomicilio: string;
+
+  @Column({ nullable: true })
+  localidad: string;
+
+  @Column({ nullable: true })
+  provincia: string;
 
   @Column({ nullable: true })
   telefono: string;

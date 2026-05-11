@@ -29,12 +29,15 @@ export type UserGestionCobranza = {
 
 @Injectable()
 export class FirebaseStrategy extends PassportStrategy(Strategy, 'firebase') {
-  private userProfileCache = new Map<string, {
-    userData: admin.firestore.DocumentData;
-    roles: string[];
-    permisos: string[];
-    authTime: number;
-  }>();
+  private userProfileCache = new Map<
+    string,
+    {
+      userData: admin.firestore.DocumentData;
+      roles: string[];
+      permisos: string[];
+      authTime: number;
+    }
+  >();
 
   constructor(private entidadesService: EntidadesService) {
     super();
@@ -57,7 +60,7 @@ export class FirebaseStrategy extends PassportStrategy(Strategy, 'firebase') {
       let permisos: string[] = [];
 
       const cachedProfile = this.userProfileCache.get(uid);
-      const tokenAuthTime = decodedUser.auth_time as number;
+      const tokenAuthTime = decodedUser.auth_time;
 
       if (cachedProfile && cachedProfile.authTime === tokenAuthTime) {
         userData = cachedProfile.userData;
@@ -67,7 +70,9 @@ export class FirebaseStrategy extends PassportStrategy(Strategy, 'firebase') {
         const userDoc = await db.collection('usuarios').doc(uid).get();
 
         if (!userDoc.exists) {
-          throw new UnauthorizedException('Usuario no configurado en el sistema');
+          throw new UnauthorizedException(
+            'Usuario no configurado en el sistema',
+          );
         }
 
         userData = userDoc.data()!;
@@ -77,7 +82,10 @@ export class FirebaseStrategy extends PassportStrategy(Strategy, 'firebase') {
           const roleDoc = await db.collection('roles').doc(rolId).get();
           const roleData = roleDoc.data();
 
-          if (roleData?.permisos && (roleData.permisos as string[]).length > 0) {
+          if (
+            roleData?.permisos &&
+            (roleData.permisos as string[]).length > 0
+          ) {
             const permisosDoc = await db
               .collection('permisos')
               .where(
@@ -94,11 +102,11 @@ export class FirebaseStrategy extends PassportStrategy(Strategy, 'firebase') {
           roles = roleData?.nombre ? [roleData.nombre as string] : [];
         }
 
-        this.userProfileCache.set(uid, { 
-          userData, 
-          roles, 
-          permisos, 
-          authTime: tokenAuthTime 
+        this.userProfileCache.set(uid, {
+          userData,
+          roles,
+          permisos,
+          authTime: tokenAuthTime,
         });
       }
 

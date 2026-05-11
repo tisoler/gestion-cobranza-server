@@ -9,4 +9,4 @@ import { GestionesController } from './gestiones.controller';
   controllers: [GestionesController],
   providers: [GestionesService],
 })
-export class GestionesModule { }
+export class GestionesModule {}

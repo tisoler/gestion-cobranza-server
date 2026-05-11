@@ -1,5 +1,10 @@
 import { Controller, Get, Post, Body, Sse, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { GestionesService } from './gestiones.service';
 import { FirebaseGuard } from '../auth/guards/firebase.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
@@ -26,8 +31,8 @@ export class GestionesController {
   @Permissions('lectura:gestion')
   @ApiOperation({ summary: 'Suscribirse a eventos de gestiones (SSE)' })
   sendEvents() {
-    return this.gestionesService.getEvents().pipe(
-      map((event) => ({ data: event })),
-    );
+    return this.gestionesService
+      .getEvents()
+      .pipe(map((event) => ({ data: event })));
   }
 }
