@@ -4,6 +4,19 @@ Accept: application/json
 Authorization: Bearer 
 
 ### GET Personas - PROD
-GET https://api.cobros.tisoler.net.ar/api/entidades
+GET https://api.cobros.astre.net.ar/api/entidades
 Accept: application/json
 Authorization: Bearer 
+
+### POST contacto Scoler
+POST http://localhost:3070/api/mail/scoler/contacto HTTP/1.1
+Accept: application/json
+
+{
+  "email": "die@gmail.com",
+  "empresa": "Diego SRL",
+  "mensaje": "Prueba",
+  "nombre": "Diego Díaz",
+  "telefono": "341896756",
+  "volumen": "medio"
+}

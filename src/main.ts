@@ -4,15 +4,17 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   // CORS
-  app.enableCors({
-    origin: [
+  const corsOrigins =
+    process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()).filter(Boolean) ?? [
       'http://localhost:3071',
       'http://localhost:5174',
-      'https://cobros.tisoler.net.ar',
-    ],
+      'http://localhost:5175',
+    ];
+  app.enableCors({
+    origin: corsOrigins,
     credentials: true,
   });
 
@@ -30,8 +32,8 @@ async function bootstrap() {
 
   // Swagger
   const config = new DocumentBuilder()
-    .setTitle('Gabino Agrogestión API')
-    .setDescription('API para la gestión agraria Gabino Agrogestión')
+    .setTitle('Gestión de Cobranza API - Astre')
+    .setDescription('API para la gestión de cobranza - Astre')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

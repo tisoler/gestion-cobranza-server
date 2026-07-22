@@ -33,4 +33,7 @@ export class CuotaTgiUrbano {
 
   @Column('date')
   vencimiento: Date;
+
+  @Column({ nullable: true })
+  tramo: string;
 }

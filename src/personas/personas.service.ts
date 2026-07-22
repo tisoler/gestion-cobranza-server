@@ -14,7 +14,7 @@ export class PersonasService {
   constructor(
     @InjectRepository(Persona)
     private personaRepository: Repository<Persona>,
-  ) {}
+  ) { }
 
   async findAll(
     options: {
@@ -170,8 +170,17 @@ export class PersonasService {
       case 'deudaDesc':
         query.orderBy('deuda_total', 'DESC');
         break;
-      case 'cuotasDesc':
-        query.orderBy('cuotas_totales', 'DESC');
+      case 'patentesDesc':
+        query.addSelect(`(SELECT COALESCE(SUM(c.cantidad_cuotas), 0) FROM cuotas_patentes c JOIN patentes t ON c."idPatente" = t.id WHERE t."idPersona" = persona.id)`, 'sum_patentes');
+        query.orderBy('sum_patentes', 'DESC');
+        break;
+      case 'tgiUrbanoDesc':
+        query.addSelect(`(SELECT COALESCE(SUM(c.cantidad_cuotas), 0) FROM cuotas_tgi_urbano c JOIN tgi_urbano t ON c."idTgiUrbano" = t.id WHERE t."idPersona" = persona.id)`, 'sum_tgiu');
+        query.orderBy('sum_tgiu', 'DESC');
+        break;
+      case 'tgiRuralDesc':
+        query.addSelect(`(SELECT COALESCE(SUM(c.cantidad_cuotas), 0) FROM cuotas_tgi_rural c JOIN tgi_rural t ON c."idTgiRural" = t.id WHERE t."idPersona" = persona.id)`, 'sum_tgir');
+        query.orderBy('sum_tgir', 'DESC');
         break;
       case 'contactoDesc':
         query.orderBy('ultimo_contacto', 'DESC', 'NULLS LAST');

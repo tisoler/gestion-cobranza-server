@@ -73,9 +73,9 @@ export class ImportacionesController {
       );
     }
 
-    if (target !== 'personas' && target !== 'patentes') {
+    if (target !== 'personas' && target !== 'patentes' && target !== 'tgi_urbano' && target !== 'tgi_rural') {
       throw new BadRequestException(
-        'Solo se soporta la importacion de personas y patentes por el momento',
+        'Solo se soporta la importacion de personas, patentes, TGI Urbano y TGI Rural',
       );
     }
 
@@ -90,8 +90,18 @@ export class ImportacionesController {
         rows,
         req.user?.idEntidad,
       );
-    } else {
+    } else if (target === 'patentes') {
       resultado = await this.importacionesService.previewImportPatentes(
+        rows,
+        req.user?.idEntidad,
+      );
+    } else if (target === 'tgi_urbano') {
+      resultado = await this.importacionesService.previewImportTgiUrbano(
+        rows,
+        req.user?.idEntidad,
+      );
+    } else {
+      resultado = await this.importacionesService.previewImportTgiRural(
         rows,
         req.user?.idEntidad,
       );
@@ -219,6 +229,90 @@ export class ImportacionesController {
     return {
       mensaje: `Se agregaron ${resultado.patentesNuevas} patente(s) y ${resultado.cuotasInsertadas} cuota(s)`,
       cantidadAgregadas: resultado.patentesNuevas,
+      cantidadCuotasAgregadas: resultado.cuotasInsertadas,
+    };
+  }
+
+  @Post('tgi-urbano')
+  @Permissions('escritura:persona')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Importar TGI Urbano desde CSV' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+        columnMapping: { type: 'string' },
+        personLinks: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Importación completada.' })
+  async importTgiUrbano(
+    @Req() req: { user?: { idEntidad?: number; roles?: string[] } },
+    @UploadedFile() file: Express.Multer.File,
+    @Body('columnMapping') columnMappingJson: string,
+    @Body('personLinks') personLinksJson: string,
+  ) {
+    if (!file) throw new BadRequestException('No se proporciono archivo');
+    let columnMapping: Record<string, string>;
+    let personLinks: Record<number, number>;
+    try {
+      columnMapping = JSON.parse(columnMappingJson) as Record<string, string>;
+      personLinks = JSON.parse(personLinksJson || '{}') as Record<number, number>;
+    } catch {
+      throw new BadRequestException('El mapeo o los links deben ser JSON validos');
+    }
+    const { rows } = this.importacionesService.parseCsv(file.buffer, columnMapping);
+    if (rows.length === 0) throw new BadRequestException('No se encontraron filas');
+
+    const resultado = await this.importacionesService.importTgiUrbano(rows, personLinks, req.user?.idEntidad);
+    return {
+      mensaje: `Se agregaron ${resultado.tgiNuevos} padrones y ${resultado.cuotasInsertadas} cuotas`,
+      cantidadAgregadas: resultado.tgiNuevos,
+      cantidadCuotasAgregadas: resultado.cuotasInsertadas,
+    };
+  }
+
+  @Post('tgi-rural')
+  @Permissions('escritura:persona')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Importar TGI Rural desde CSV' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+        columnMapping: { type: 'string' },
+        personLinks: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Importación completada.' })
+  async importTgiRural(
+    @Req() req: { user?: { idEntidad?: number; roles?: string[] } },
+    @UploadedFile() file: Express.Multer.File,
+    @Body('columnMapping') columnMappingJson: string,
+    @Body('personLinks') personLinksJson: string,
+  ) {
+    if (!file) throw new BadRequestException('No se proporciono archivo');
+    let columnMapping: Record<string, string>;
+    let personLinks: Record<number, number>;
+    try {
+      columnMapping = JSON.parse(columnMappingJson) as Record<string, string>;
+      personLinks = JSON.parse(personLinksJson || '{}') as Record<number, number>;
+    } catch {
+      throw new BadRequestException('El mapeo o los links deben ser JSON validos');
+    }
+    const { rows } = this.importacionesService.parseCsv(file.buffer, columnMapping);
+    if (rows.length === 0) throw new BadRequestException('No se encontraron filas');
+
+    const resultado = await this.importacionesService.importTgiRural(rows, personLinks, req.user?.idEntidad);
+    return {
+      mensaje: `Se agregaron ${resultado.tgiNuevos} padrones y ${resultado.cuotasInsertadas} cuotas`,
+      cantidadAgregadas: resultado.tgiNuevos,
       cantidadCuotasAgregadas: resultado.cuotasInsertadas,
     };
   }

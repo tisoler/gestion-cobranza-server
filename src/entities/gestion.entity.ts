@@ -31,4 +31,14 @@ export class Gestion {
 
   @Column({ type: 'text', nullable: true })
   observaciones: string;
+
+  @Column({ nullable: true })
+  usuario: string;
+
+  @Column({ nullable: true })
+  mencionado_uid: string;
+
+  /** JSON array de UIDs Firebase mencionados */
+  @Column({ type: 'text', nullable: true })
+  mencionados_uids: string;
 }

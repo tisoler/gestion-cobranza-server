@@ -13,12 +13,17 @@ import { CuotaTgiUrbano } from './entities/cuota-tgi-urbano.entity';
 import { CuotaTgiRural } from './entities/cuota-tgi-rural.entity';
 import { CuotaPatente } from './entities/cuota-patente.entity';
 import { PlanPago } from './entities/plan-pago.entity';
+import { Notificacion } from './entities/notificacion.entity';
 import { AuthModule } from './auth/auth.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { NotificacionesModule } from './notificaciones/notificaciones.module';
 import { EntidadesModule } from './entidades/entidades.module';
 import { PersonasModule } from './personas/personas.module';
 import { GestionesModule } from './gestiones/gestiones.module';
 import { PlanesPagoModule } from './planes-pago/planes-pago.module';
 import { ImportacionesModule } from './importaciones/importaciones.module';
+import { ReportesModule } from './reportes/reportes.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -45,6 +50,7 @@ import { ImportacionesModule } from './importaciones/importaciones.module';
           CuotaTgiRural,
           CuotaPatente,
           PlanPago,
+          Notificacion,
         ],
         synchronize: false,
         logging: true,
@@ -57,6 +63,10 @@ import { ImportacionesModule } from './importaciones/importaciones.module';
     GestionesModule,
     PlanesPagoModule,
     ImportacionesModule,
+    ReportesModule,
+    UsuariosModule,
+    NotificacionesModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

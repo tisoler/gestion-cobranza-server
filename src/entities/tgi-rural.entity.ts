@@ -30,11 +30,11 @@ export class TgiRural {
   @Column()
   codigo_web: string;
 
-  @Column()
-  direccion_padron: string;
+  @Column({ nullable: true })
+  manzana: string;
 
-  @Column('float')
-  sup_campo: number;
+  @Column('float', { nullable: true })
+  sup_hectarea: number;
 
   @OneToMany(() => CuotaTgiRural, (cuota) => cuota.tgiRural)
   cuotas: CuotaTgiRural[];

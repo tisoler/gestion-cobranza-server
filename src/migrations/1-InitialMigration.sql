@@ -21,8 +21,7 @@ CREATE TABLE "tgi_urbano" (
   "idPersona" integer NOT NULL, 
   "domicilio" text NOT NULL, 
   "numero_padron" text NOT NULL, 
-  "codigo_web" text NOT NULL, 
-  "direccion_padron" text NOT NULL, 
+  "codigo_web" text NOT NULL,
   "sup_terreno" double precision NOT NULL, 
   "mts_frente" double precision NOT NULL
 );
@@ -32,9 +31,7 @@ CREATE TABLE "tgi_rural" (
   "idPersona" integer NOT NULL, 
   "domicilio" text NOT NULL, 
   "numero_padron" text NOT NULL, 
-  "codigo_web" text NOT NULL, 
-  "direccion_padron" text NOT NULL, 
-  "sup_campo" double precision NOT NULL
+  "codigo_web" text NOT NULL,
 );
 
 CREATE TABLE "patentes" (

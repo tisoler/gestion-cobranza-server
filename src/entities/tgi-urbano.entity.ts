@@ -30,14 +30,14 @@ export class TgiUrbano {
   @Column()
   codigo_web: string;
 
-  @Column()
-  direccion_padron: string;
-
   @Column('float')
   sup_terreno: number;
 
   @Column('float')
   mts_frente: number;
+
+  @Column({ nullable: true })
+  manzana: string;
 
   @OneToMany(() => CuotaTgiUrbano, (cuota) => cuota.tgiUrbano)
   cuotas: CuotaTgiUrbano[];

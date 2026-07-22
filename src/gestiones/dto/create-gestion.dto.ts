@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateGestionDto {
   @ApiProperty({ description: 'ID de la persona asociada' })
@@ -21,4 +27,20 @@ export class CreateGestionDto {
   @IsString()
   @IsOptional()
   observaciones?: string;
+
+  @ApiPropertyOptional({
+    description: 'UIDs Firebase de usuarios mencionados con @ en el mensaje',
+    type: [String],
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  mencionadosUids?: string[];
+
+  @ApiPropertyOptional({
+    description: 'Deprecated: usar mencionadosUids',
+  })
+  @IsString()
+  @IsOptional()
+  mencionadoUid?: string;
 }
