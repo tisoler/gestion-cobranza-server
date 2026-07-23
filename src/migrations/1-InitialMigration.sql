@@ -31,7 +31,7 @@ CREATE TABLE "tgi_rural" (
   "idPersona" integer NOT NULL, 
   "domicilio" text NOT NULL, 
   "numero_padron" text NOT NULL, 
-  "codigo_web" text NOT NULL,
+  "codigo_web" text NOT NULL
 );
 
 CREATE TABLE "patentes" (

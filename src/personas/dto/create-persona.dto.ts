@@ -14,6 +14,16 @@ export class CreatePersonaDto {
   @IsOptional()
   dni?: string;
 
+  @ApiPropertyOptional({ description: 'Tipo de documento (DNI, CUIT, etc.)' })
+  @IsString()
+  @IsOptional()
+  tipoDoc?: string;
+
+  @ApiPropertyOptional({ description: 'Número de documento' })
+  @IsString()
+  @IsOptional()
+  nroDoc?: string;
+
   @ApiPropertyOptional({ description: 'CUIT de la persona' })
   @IsString()
   @IsOptional()
@@ -28,6 +38,16 @@ export class CreatePersonaDto {
   @IsString()
   @IsNotEmpty()
   apellido: string;
+
+  @ApiPropertyOptional({ description: 'Apellido y nombre unificado' })
+  @IsString()
+  @IsOptional()
+  apellidoNombre?: string;
+
+  @ApiPropertyOptional({ description: 'Calle del domicilio' })
+  @IsString()
+  @IsOptional()
+  calleDomicilio?: string;
 
   @ApiPropertyOptional({ description: 'Teléfono de contacto' })
   @IsString()

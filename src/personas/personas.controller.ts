@@ -117,8 +117,14 @@ export class PersonasController {
   @Permissions('escritura:persona')
   @ApiOperation({ summary: 'Crear una nueva persona' })
   @ApiResponse({ status: 201, description: 'Persona creada correctamente.' })
-  create(@Body() createPersonaDto: CreatePersonaDto) {
-    return this.personasService.create(createPersonaDto);
+  create(
+    @Req() req: { user?: { idEntidad?: number } },
+    @Body() createPersonaDto: CreatePersonaDto,
+  ) {
+    return this.personasService.create({
+      ...createPersonaDto,
+      idEntidad: createPersonaDto.idEntidad ?? req.user?.idEntidad ?? null,
+    });
   }
 
   @Patch(':id/habilitado')

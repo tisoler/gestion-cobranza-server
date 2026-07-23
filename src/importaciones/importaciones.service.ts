@@ -772,11 +772,11 @@ export class ImportacionesService {
         patentesMap.set(nroPatenteLimpio, {
           patenteData: {
             numero_patente: nroPatenteOriginal.toUpperCase().trim(),
-            marca: row.marca?.trim() || null,
-            modelo: row.modelo?.trim() || null,
+            marca: row.marca?.trim() || 'Sin marca',
+            modelo: row.modelo?.trim() || 'Sin modelo',
             marcaModelo:
               row.marca === row.modelo && row.marca ? row.marca?.trim() : null,
-            tipo: row.tipo?.trim() || null,
+            tipo: row.tipo?.trim() || 'Sin tipo',
             tramo: row.tramo?.trim() || null,
             domicilio: row.domicilio?.trim() || null,
             idPersona: personaId,
